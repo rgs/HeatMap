@@ -79,6 +79,7 @@ my $units_time;			# time units (eg, "us")
 my $timefactor = 1;		# divisor for time column
 my $limit_col = 10000;		# max permitted columns
 my $debugmsg = 0;		# print debug messages
+my $datacol = 1;                # column in which values are to be found
 my $grid = 0;			# draw grid lines
 
 GetOptions(
@@ -94,6 +95,7 @@ GetOptions(
     'title=s'        => \$titletext,
     'unitslatency=s' => \$units_lat,
     'unitstime=s'    => \$units_time,
+    'datacol=i'      => \$datacol,
     'grid'           => \$grid
 ) or die <<USAGE_END;
 USAGE: $0 [options] infile > outfile.svg\n
@@ -112,6 +114,7 @@ USAGE: $0 [options] infile > outfile.svg\n
 	--fontsize		# font size (default 12)
 	--boxsize		# heat map box size in pixels (default 8)
 	--grid			# draw grid lines
+        --datacol               # read values from the Nth column (default 1)
     eg,
 	$0 --unitstime=us --unitslatency=us --minlat=2000 --maxlat=10000 \\
 	    trace.txt > heatmap.svg
@@ -211,7 +214,8 @@ my ($start_time, $rest) = split ' ', $lines[0];
 my $end_time = $start_time;
 my $largest_latency = 0;
 foreach my $line (@lines) {
-	my ($time, $latency) = split ' ', $line;
+	my ($time, @latencies) = split ' ', $line;
+        my $latency = $latencies[$datacol-1];
 	next if !defined $time or $time eq "";
 	next if !defined $latency or $latency eq "";
 	$end_time = $time if $time > $end_time;
@@ -231,7 +235,8 @@ debug "Building map.\n";
 my $largest_col = 0;
 my $largest_count = 0;
 foreach my $line (@lines) {
-	my ($time, $latency) = split ' ', $line;
+	my ($time, @latencies) = split ' ', $line;
+        my $latency = $latencies[$datacol-1];
 	next if !defined $time or $time eq "";
 	next if !defined $latency or $latency eq "";
 	next if $latency < $min_lat;
