@@ -239,6 +239,7 @@ foreach my $line (@lines) {
 	my $sec = int(($time - $start_time) / $timefactor);
 	my $col = int($sec / $step_sec);
 	next if defined $max_col and $col > $max_col;
+	next if $col < 0;
 	my $lat = int(($latency - $min_lat) / $step_lat);
 	$map[$col][$lat]++;
 	$largest_col = $col if $col > $largest_col;
