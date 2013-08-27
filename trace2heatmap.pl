@@ -210,11 +210,11 @@ sub debug {
 # Parse input
 my @lines = <>;
 shift @lines if $lines[0] =~ m/[a-zA-Z]/;	# remove header
-my ($start_time, $rest) = split ' ', $lines[0];
+my ($start_time, $rest) = split /\s/, $lines[0];
 my $end_time = $start_time;
 my $largest_latency = 0;
 foreach my $line (@lines) {
-	my ($time, @latencies) = split ' ', $line;
+	my ($time, @latencies) = split /\s/, $line;
         my $latency = $latencies[$datacol-1];
 	next if !defined $time or $time eq "";
 	next if !defined $latency or $latency eq "";
@@ -235,7 +235,7 @@ debug "Building map.\n";
 my $largest_col = 0;
 my $largest_count = 0;
 foreach my $line (@lines) {
-	my ($time, @latencies) = split ' ', $line;
+	my ($time, @latencies) = split /\s/, $line;
         my $latency = $latencies[$datacol-1];
 	next if !defined $time or $time eq "";
 	next if !defined $latency or $latency eq "";
