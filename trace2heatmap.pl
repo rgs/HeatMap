@@ -227,7 +227,7 @@ if ((($end_time - $start_time) / $timefactor) > $limit_col) {
 }
 $max_lat ||= $largest_latency;
 $step_lat ||= int(($max_lat - $min_lat) / $rows);
-die "Row resolution too high" if $step_lat == 0;
+die "Row resolution too high (rows=$rows, max_lat=$max_lat, min_lat=$min_lat)" if $step_lat == 0;
 
 # Build map
 my @map;
